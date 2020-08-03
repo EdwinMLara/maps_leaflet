@@ -1,4 +1,4 @@
-var mymap = L.map('mapid').setView([20.1089155, -101.151713], 11);
+var mymap = L.map('mapid').setView([20.1089155, -101.151713], 12);
 
 L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
@@ -6,10 +6,11 @@ L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_toke
     id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1,
-    accessToken: 'apikey'
+    accessToken: '',
+    layers: [geojson_municipal]
 }).addTo(mymap);
 
-L.geoJson(capa_municipal).addTo(mymap);
+var geojson_municipal = L.geoJson(capa_municipal).addTo(mymap);
 
 function getColor(d) {
     let salida = '';
@@ -81,7 +82,7 @@ function highlighFeature(e){
 
 
 function resetHighLight(e){
-    geojson.resetStyle(e.target);
+    geojson_colonias.resetStyle(e.target);
     info.update();
 }
 
@@ -97,28 +98,33 @@ function onEachFeature(feature,layer){
     });
 }
 
-var geojson;
+var geojson_colonias;
 
-geojson = L.geoJson(capa_colonias,{style: style, onEachFeature: onEachFeature}).addTo(mymap);
+geojson_colonias = L.geoJson(capa_colonias,{style: style, onEachFeature: onEachFeature}).addTo(mymap);
 
 var leyenda_control = L.control({position: 'bottomright'});
 
 leyenda_control.onAdd = function(mymap){
     var div = L.DomUtil.create('div','info legend'),
-        colonias = capa_colonias.features.reduce((val, key) => {
-            val.push(key.properties.Nombre);
-            return val;    
-        },[]);
+        capa_colonias_reduce = capa_colonias.features.reduce((val, key) => {
+         
+            val['colonias'].push(key.properties.Nombre);
+            val['colores'].push(key.properties.FID);
 
-        for (var i = 0; i < colonias.length; i++) {
+            return val;    
+        },{colonias: [], colores: []});
+
+        let n  = capa_colonias_reduce.colonias.length;
+        for (var i = 0; i < n; i++) {
             div.innerHTML +=
-                '<i style="background:' + getColor(i + 1) + '"></i> ' + colonias[i] + '<br>';
+                '<i style="background:' + getColor(capa_colonias_reduce.colores[i]) + '"></i> ' + capa_colonias_reduce.colonias[i] + '<br>';
         }
 
         return div;   
 };
 
 leyenda_control.addTo(mymap);
+
 var info = L.control();
 
 info.onAdd = function(map){
@@ -128,10 +134,55 @@ info.onAdd = function(map){
 }
 
 info.update = function(props) {
-    this._div.innerHTML = '<h4>Limite Territorial</h4>' + (props ? '<b>' + props.Nombre + '</b><br />' : 'Uriangato');
+    this._div.innerHTML = '<h4>Limite Territorial</h4>' + (props ? '<b>' + props.Nombre + '</b><br />' : '<b> Uriangato </b><br />');
 }
 
 info.addTo(mymap);
+
+var LeafIcon = L.Icon.extend({
+    options: {
+        shadowUrl: '',
+        iconSize: [40, 25],
+        popupAnchor: [-3, -76]
+    }
+});
+
+var farmaciaIcon = new LeafIcon({iconUrl: 'css/images/fsc1.png', iconSize: [18.75, 30]});
+var hospitalIcon = new LeafIcon({iconUrl: 'css/images/icono-hospital-2x.png',iconSize: [61.5, 37.5]});
+var taxiIcon = new LeafIcon({iconUrl: 'css/images/taxi.png',iconSize: [41.25, 37.5]});
+
+var geojson_senales = L.geoJson(capa_senales,{
+    pointToLayer: function (feature, latlng) {
+        console.log(feature.properties.description);
+        switch(feature.properties.description){
+            case "farmacia":
+                return L.marker(latlng,{icon: farmaciaIcon});
+            case "taxi":
+                return L.marker(latlng,{icon: taxiIcon});
+            case "hospital":
+                return L.marker(latlng,{icon: hospitalIcon});
+            default:
+                return L.marker(latlng);
+        }
+        
+    },
+    onEachFeature:function(feature, layer) {
+        if (feature.properties && feature.properties.Name) {
+            layer.bindPopup('<b>' + feature.properties.Name + '</b>');
+        }
+    }
+}).addTo(mymap);
+
+var baseMaps = {
+    "<span style='color: gray'> Municipal </span>": geojson_municipal
+};
+
+var senales = {
+    "Colonias": geojson_colonias,
+    "Señales": geojson_senales 
+};
+
+L.control.layers(baseMaps,senales,{position: 'topleft'}).addTo(mymap);
 
 
 

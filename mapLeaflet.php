@@ -15,5 +15,6 @@
 </script>
 <script src="js/capa_municipal.js"></script>
 <script src="js/capa_colonias.js"></script>
+<script src="js/capa_senales.js"></script>
 <script src="js/mapLeaflet.js"></script>
 </html>
