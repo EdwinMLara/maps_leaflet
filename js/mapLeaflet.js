@@ -1,13 +1,21 @@
 var mymap = L.map('mapid').setView([20.1189155, -101.151713], 12);
 
-L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+var Satelite = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+    maxZoom: 20,
+    id: 'mapbox/satellite-v9',
+    tileSize: 512,
+    zoomOffset: -1,
+    accessToken: 'pk.eyJ1IjoiZWR3aW5tbGFyYSIsImEiOiJja2Q3bDJtZ2UwMG8yMnlwMnVsODVtNTJlIn0.iO_9meGtLf17xZmKR3ytVg', 
+}).addTo(mymap);
+
+var orginal = L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
     maxZoom: 20,
     id: 'mapbox/streets-v11',
     tileSize: 512,
     zoomOffset: -1,
-    accessToken: 'pk.eyJ1IjoiZWR3aW5tbGFyYSIsImEiOiJja2Q3bDJtZ2UwMG8yMnlwMnVsODVtNTJlIn0.iO_9meGtLf17xZmKR3ytVg',
-    layers: [geojson_municipal]
+    accessToken: 'pk.eyJ1IjoiZWR3aW5tbGFyYSIsImEiOiJja2Q3bDJtZ2UwMG8yMnlwMnVsODVtNTJlIn0.iO_9meGtLf17xZmKR3ytVg', 
 }).addTo(mymap);
+
 
 var geojson_municipal = L.geoJson(capa_municipal).addTo(mymap);
 
@@ -141,7 +149,7 @@ var LeafIcon = L.Icon.extend({
     options: {
         shadowUrl: '',
         iconSize: [41.25, 37.5],
-        popupAnchor: [-3, -76]
+        popupAnchor: [-1, -76]
     }
 });
 
@@ -165,6 +173,7 @@ var panaderiaIcon = new LeafIcon({iconUrl: 'css/images/panaderia.png'});
 var correosIcon = new LeafIcon({iconUrl: 'css/images/correos.png'});
 var bibliotecaIcon = new LeafIcon({iconUrl: 'css/images/biblioteca.png'});
 var autobusesIcon = new LeafIcon({iconUrl: 'css/images/autobuses.png', iconSize: [55, 50]});
+var historiaIcon = new LeafIcon({iconUrl: 'css/images/historia.png', iconSize: [55, 50]});
 
 function geoJsontoMarker(capa){
     return  L.geoJson(capa,{
@@ -209,7 +218,9 @@ function geoJsontoMarker(capa){
                     case "autobuses":
                         return L.marker(latlng,{icon: autobusesIcon}); 
                     case "cruzroja":
-                        return L.marker(latlng,{icon: cruzrojaIcon});  
+                        return L.marker(latlng,{icon: cruzrojaIcon}); 
+                    case "historia":
+                        return L.marker(latlng,{icon: historiaIcon}); 
                     default:
                         return L.marker(latlng);
                 }
@@ -218,6 +229,8 @@ function geoJsontoMarker(capa){
             onEachFeature:function(feature, layer) {
                 if (feature.properties && feature.properties.Name) {
                     layer.bindPopup('<b>' + feature.properties.Name + '</b><br>' + (feature.properties.direccion ? '<br>' + feature.properties.direccion +'</br>' : ''));
+                }else{
+                    console.log("no se puede bindear")
                 }
             }
         }).addTo(mymap);
@@ -233,12 +246,18 @@ var geojson_senales_transporte = geoJsontoMarker(capa_transporte);
 var geojson_senales_farmacias = geoJsontoMarker(capa_farmacias);
 var geojson_senales_bancos = geoJsontoMarker(capa_bancos);
 var geojson_senales_hospitales = geoJsontoMarker(capa_hospitales);
+var geojson_senales_historia = geoJsontoMarker(capa_historia);
 
 var baseMaps = {
-    "<span style='color: gray'> Municipal </span>": geojson_municipal
+    "<span style='color: gray'> Satelite </span>": Satelite,
+    "<span style='color: gray'> Original </span>": orginal
 };
 
+var allLayers = [geojson_municipal,geojson_colonias,geojson_senales_generales];
+var todo = L.layerGroup(allLayers);
+
 var senales = {
+    "Municipal": geojson_municipal,
     "Colonias": geojson_colonias,
     "Generales": geojson_senales_generales,
     "Baños": geojson_senales_wc,
@@ -249,11 +268,20 @@ var senales = {
     "Transporte" : geojson_senales_transporte,
     "Farmacias" : geojson_senales_farmacias,
     "Bancos" : geojson_senales_bancos,
-    "Hospitales": geojson_senales_hospitales
+    "Hospitales": geojson_senales_hospitales,
+    "Historia": geojson_senales_historia
 };
 
-L.control.layers(baseMaps,senales,{position: 'topleft'}).addTo(mymap);
+var control_layers = L.control.layers(baseMaps,senales,{position: 'topleft'}).addTo(mymap);
 
+/*var control =   L.control.activeLayers(baseMaps,senales);
+control.addTo(mymap)
+console.log(control.getActiveBaseLayer().name);
+
+var overlayLayers = control.getActiveOverlayLayers()
+for (var overlayId in overlayLayers) {
+    console.log(overlayLayers[overlayId].name)
+}*/
 
 
 

@@ -4998,6 +4998,35 @@ var Layers = Control.extend({
 		}
 	},
 
+	/*addLayer: function (layer) {
+		// TODO method is too big, refactor
+
+		var id = L.stamp(layer);
+
+		if (this._layers[id]) { return this; }
+
+		this._layers[id] = layer;
+
+		// TODO getMaxZoom, getMinZoom in ILayer (instead of options)
+		if (layer.options && (!isNaN(layer.options.maxZoom) || !isNaN(layer.options.minZoom))) {
+			this._zoomBoundLayers[id] = layer;
+			this._updateZoomLevels();
+		}
+
+		// TODO looks ugly, refactor!!!
+		if (this.options.zoomAnimation && L.TileLayer && (layer instanceof L.TileLayer)) {
+			this._tileLayersNum++;
+			this._tileLayersToLoad++;
+			layer.on('load', this._onTileLayerLoad, this);
+		}
+
+		if (this._loaded) {
+			this._layerAdd(layer);
+		}
+
+		return this;
+	},*/
+
 	onAdd: function (map) {
 		this._initLayout();
 		this._update();

@@ -158,8 +158,8 @@ var capa_gasolineras = {
             { "type": "Feature", "properties": { "Name": "Pemex", "description": "gasolinera", "direccion" : "Blvd. Uriangato 501, Joyas del Pedregal, 38980 Uriangato, Gto. Tel: 55 1944 2500" }, "geometry": { "type": "Point", "coordinates": [ -101.1707326, 20.1095043 ] } },
         ]
     }
-
-var capa_historia = {
+	
+	var capa_historia = {
     "type": "FeatureCollection",
     "name": "Señaletica",
     "crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
@@ -171,7 +171,7 @@ var capa_historia = {
             { "type": "Feature", "properties": { "Name": "Fortín 5 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en Portal Miguel Hidalgo frente a la Parroquia" }, "geometry": { "type": "Point", "coordinates": [ -101.178438, 20.141941 ] } },
             { "type": "Feature", "properties": { "Name": "Fortín 6 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en la calle Obregón, hoy en día actuales instalaciones del Instituto Uriangato " }, "geometry": { "type": "Point", "coordinates": [ -101.179148, 20.142308 ] } },
             { "type": "Feature", "properties": { "Name": "Fortín 7 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en la esquina de las calles Mina y Zaragoza" }, "geometry": { "type": "Point", "coordinates": [ -101.176720, 20.139654 ] } },
-            { "type": "Feature", "properties": { "Name": "Fortín 8 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en la antigua casa de don Vicente Santracruz, edificio que sirvió como Jefatura Política en clavado en la calle Mina" }, "geometry": { "type": "Point", "coordinates": [ -101.176957, 20.139661 ] } },
-            { "type": "Feature", "properties": { "Name": "Fortín 9 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en la esquina de las calles Ocampo con Galeana, primer fortín en abirir fuego en la heróica defensa" }, "geometry": { "type": "Point", "coordinates": [ -101.175297, 20.140806 ] } },
+			{ "type": "Feature", "properties": { "Name": "Fortín 8 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en la antigua casa de don Vicente Santracruz, edificio que sirvió como Jefatura Política en clavado en la calle Mina" }, "geometry": { "type": "Point", "coordinates": [ -101.176957, 20.139661 ] } },
+			{ "type": "Feature", "properties": { "Name": "Fortín 9 - Heróica Defensa de Uriangato, 24 de Junio de 1918", "description": "historia", "direccion" : "Fortín ubicado en la esquina de las calles Ocampo con Galeana, primer fortín en abirir fuego en la heróica defensa" }, "geometry": { "type": "Point", "coordinates": [ -101.175297, 20.140806 ] } },
         ]
     }

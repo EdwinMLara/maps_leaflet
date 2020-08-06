@@ -10,8 +10,9 @@
 <body>
     <div id="mapid"></div>
 </body>
-<script src="js/jQuery.js"></script>
+
 <script src="js/leaflet.js"></script>
+<script src="js/ActiveLayers.js"></script>
 <script src="js/capa_municipal.js"></script>
 <script src="js/capa_colonias.js"></script>
 <script src="js/capa_senales.js"></script>
