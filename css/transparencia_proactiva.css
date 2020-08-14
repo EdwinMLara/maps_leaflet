@@ -1,0 +1,39 @@
+.transparencia-container {
+	box-sizing: content-box;
+	padding: 5px 0px 0px 5px;
+	transition: 1s;
+	position: fixed;
+	top: 250px;
+    right: -10px;
+	z-index: 2147483648;
+}
+
+.transparencia li {
+	list-style-type: none;
+	height: 43px;
+	padding: 0px;
+	margin: 0px 0px 1px 0px;
+	-webkit-transition: all 0.25s ease-in-out;
+	-moz-transition: all 0.25s ease-in-out;
+	-o-transition: all 0.25s ease-in-out;
+	transition: all 0.25s ease-in-out;
+	cursor: pointer;
+}
+	
+.transparencia li p a {
+	text-decoration: none;
+	color: #2C3539;
+}
+
+.transparencia li img {
+	float: left;
+	margin: 5px 4px;
+	margin-right: 5px;
+}
+
+.transparencia li p {
+	padding-top: 5px;
+	margin: 0px;
+	line-height: 16px;
+	font-size: 11px;
+}
