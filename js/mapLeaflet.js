@@ -139,12 +139,14 @@ leyenda_control.onAdd = function (mymap) {
         let aux = div_colonias.style.display.localeCompare('none');
         if(!aux){
             div_colonias.style.display = 'block';
-            div_flecha_control.style.transform = 'rotate(180deg)'
-            div_flecha_control.onmouseover = () =>{ div_flecha_control.style.transform = 'rotate(0deg)' }
+            div_flecha_control.style.transform = 'rotate(180deg)';
+            div_flecha_control.onmouseover = () =>{ div_flecha_control.style.transform = 'rotate(0deg)' };
+            div_flecha_control.onmouseleave = () => {div_flecha_control.style.transform = 'rotate(180deg)'};
         }else{
             div_colonias.style.display = 'none';
-            div_flecha_control.style.transform = 'rotate(0deg)'
-            div_flecha_control.onmouseover = () =>{ div_flecha_control.style.transform = 'rotate(180deg)' }
+            div_flecha_control.style.transform = 'rotate(0deg)';
+            div_flecha_control.onmouseover = () =>{ div_flecha_control.style.transform = 'rotate(180deg)' };
+            div_flecha_control.onmouseleave = () => {div_flecha_control.style.transform = 'rotate(0deg)'};
         }
     });
 
@@ -276,9 +278,6 @@ var baseMaps = {
     "<span style='color: gray'> Satelite </span>": Satelite,
     "<span style='color: gray'> Original </span>": orginal
 };
-
-var allLayers = [geojson_municipal, geojson_colonias, geojson_senales_generales];
-var todo = L.layerGroup(allLayers);
 
 var allLayers2 = [geojson_senales_bancos, geojson_senales_estacionamientos, geojson_senales_farmacias];
 var todo = L.layerGroup(allLayers2);
