@@ -298,7 +298,58 @@ var senales = {
     "Historia": geojson_senales_historia
 };
 
-var control_layers = L.control.layers(baseMaps, senales, { position: 'topleft' }).addTo(mymap);
+var control_layers = L.control.layers(baseMaps, senales, { position: 'topleft' });
+
+control_layers.addTo(mymap);
+
+L.Control.DisableAllLayers = L.Control.extend({
+    onAdd: function(map) {
+        var divControlAllLayers = L.DomUtil.create('div');
+        var img = L.DomUtil.create('img','',divControlAllLayers);
+
+        img.src = 'css/images/disabled.png';
+        img.style.width = '20px';
+        img.style.cursor = 'pointer';
+
+        img.onmouseover = () =>{ img.style.width= '25px' };
+        img.onmouseleave = () => {img.style.width= '20px' };
+
+        img.addEventListener('click',()=>{
+            if(!(Layers_arrays.length < 1 || Layers_arrays == undefined)){
+                Layers_arrays.forEach(layer_aux => {
+                    map.addLayer(layer_aux);
+                })
+                Layers_arrays = [];
+            }else{
+                map.eachLayer(function (layer) {
+                    if(!layer.hasOwnProperty('_url')){
+                        map.removeLayer(layer);
+                        Layers_arrays.push(layer)
+                    }
+                }); 
+            }
+           
+        })
+
+        var divControlAllLayersMensaje = L.DomUtil.create('div','mensajeRemove',divControlAllLayers);
+        divControlAllLayersMensaje.innerHTML += "Ocultar Capas";
+        divControlAllLayersMensaje.style.color = 'red';
+
+        return divControlAllLayers;
+    },
+
+    onRemove: function(map) {
+        // Nothing to do here
+    }
+});
+
+L.control.disableAllLayers = function(opts) {
+    return new L.Control.DisableAllLayers(opts);
+}
+var Layers_arrays = [];
+L.control.disableAllLayers({ position: 'bottomleft' }).addTo(mymap);
+
+
 
 
 
