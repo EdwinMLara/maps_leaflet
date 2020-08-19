@@ -1,5 +1,5 @@
 <?php
-require_once("config.php");
+require_once("./config.php");
 
 class MySqli_DB {
 
@@ -95,11 +95,15 @@ public function affected_rows()
 /*--------------------------------------------------------------*/
 /* Function for while loop
 /*--------------------------------------------------------------*/
-public function while_loop($loop){
+public function while_loop($loop,$typeClass){
  global $db;
    $results = array();
    while ($result = $this->fetch_array($loop)) {
-      $results[] = $result;
+     $aux = new $typeClass();
+      foreach ($result as $property => $argument) {
+        $aux->{$property} = $argument;
+      }
+      array_push($results,$aux);
    }
  return $results;
 }

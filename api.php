@@ -1,6 +1,5 @@
 <?php
-    require_once("config/load.php");
-    $types = find_by_typo('punto','1');
-    echo json_encode($types);
+    include_once "Modelos/Punto.php";
+    json_encode(Punto::getAll());
 
 ?>

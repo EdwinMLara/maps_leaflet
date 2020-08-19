@@ -1,5 +1,5 @@
 <?php
-  require_once('load.php');
+  //require_once('load.php');
 
 /*--------------------------------------------------------------*/
 /* Function for find all database table rows by table name
@@ -8,19 +8,17 @@ function find_all($table) {
    global $db;
    if(tableExists($table))
    {
-     return find_by_sql("SELECT * FROM ".$db->escape($table));
+     return find_by_sql("SELECT * FROM ".$db->escape($table),$table);
    }
 }
 /*--------------------------------------------------------------*/
 /* Function for Perform queries
 /*--------------------------------------------------------------*/
-function find_by_sql($sql)
+function find_by_sql($sql,$typeClass)
 {
   global $db;
   $result = $db->query($sql);
-  $result_set = $db->while_loop($result);
-  $aux_json = array('Features' => $result_set);
-  //echo json_encode($aux_json);
+  $result_set = $db->while_loop($result,$typeClass);
  return $result_set;
 }
 /*--------------------------------------------------------------*/
@@ -39,7 +37,7 @@ function find_by_id($table,$id)
      }
 }
 
-function find_by_typo($table,$id)
+/*function find_by_typo($table,$id)
 {
   global $db;
   $id = (int)$id;
@@ -47,7 +45,7 @@ function find_by_typo($table,$id)
    {
      return find_by_sql("SELECT * FROM {$db->escape($table)} WHERE tipo_p='{$db->escape($id)}'");
    }
-}
+}*/
 
 
 /*--------------------------------------------------------------*/
