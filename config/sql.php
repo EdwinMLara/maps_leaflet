@@ -8,7 +8,8 @@ function find_all($table) {
    global $db;
    if(tableExists($table))
    {
-     return find_by_sql("SELECT * FROM ".$db->escape($table),$table);
+     $sql = "SELECT * FROM ".$db->escape($table);
+     return find_by_sql($sql,$table);
    }
 }
 /*--------------------------------------------------------------*/
@@ -17,9 +18,8 @@ function find_all($table) {
 function find_by_sql($sql,$typeClass)
 {
   global $db;
-  $result = $db->query($sql);
-  $result_set = $db->while_loop($result,$typeClass);
- return $result_set;
+  $results = $db->query($sql);
+  return  $db->while_loop($results,$typeClass);
 }
 /*--------------------------------------------------------------*/
 /*  Function for Find data from table by id

@@ -1,112 +1,115 @@
 <?php
-require_once("./config.php");
+require_once("config.php");
 
 class MySqli_DB {
 
-    private $con;
-    public $query_id;
+  private $con;
+  public $query_id;
 
-    function __construct() {
-      $this->db_connect();
+  function __construct() {
+    $this->db_connect();
+  }
+
+  /*--------------------------------------------------------------*/
+  /* Function for Open database connection
+  /*--------------------------------------------------------------*/
+  public function db_connect(){
+    $this->con = mysqli_connect(DB_HOST,DB_USER,DB_PASS);
+    if(!$this->con){
+      die(" Database connection failed:". mysqli_connect_error());
+    } else {
+      mysqli_set_charset($this->con, 'utf8');
+      $select_db = $this->con->select_db(DB_NAME);
+      if(!$select_db){
+        die("Failed to Select Database". mysqli_connect_error());
+      }
+    }
+  }
+  /*--------------------------------------------------------------*/
+  /* Function for Close database connection
+  /*--------------------------------------------------------------*/
+
+  public function db_disconnect()
+  {
+    if(isset($this->con))
+    {
+      mysqli_close($this->con);
+      unset($this->con);
+    }
+  }
+  /*--------------------------------------------------------------*/
+  /* Function for mysqli query
+  /*--------------------------------------------------------------*/
+  public function query($sql)
+    {
+
+        if (trim($sql != "")) {
+            $this->query_id = $this->con->query($sql);
+        }
+        if (!$this->query_id)
+          // only for Develope mode
+                die("Error en esta consulta :<pre> " . $sql ."</pre>");
+        // For production mode
+          //  die("Error on Query");
+
+        return $this->query_id;
+
     }
 
-/*--------------------------------------------------------------*/
-/* Function for Open database connection
-/*--------------------------------------------------------------*/
-public function db_connect()
-{
-  $this->con = mysqli_connect(DB_HOST,DB_USER,DB_PASS);
-  if(!$this->con)
-         {
-           die(" Database connection failed:". mysqli_connect_error());
-         } else {
-           $select_db = $this->con->select_db(DB_NAME);
-             if(!$select_db)
-             {
-               die("Failed to Select Database". mysqli_connect_error());
-             }
-         }
-}
-/*--------------------------------------------------------------*/
-/* Function for Close database connection
-/*--------------------------------------------------------------*/
-
-public function db_disconnect()
-{
-  if(isset($this->con))
+  /*--------------------------------------------------------------*/
+  /* Function for Query Helper
+  /*--------------------------------------------------------------*/
+  public function fetch_array($statement)
   {
-    mysqli_close($this->con);
-    unset($this->con);
+    return mysqli_fetch_array($statement);
   }
-}
-/*--------------------------------------------------------------*/
-/* Function for mysqli query
-/*--------------------------------------------------------------*/
-public function query($sql)
-   {
+  public function fetch_object($statement)
+  {
+    return mysqli_fetch_object($statement);
+  }
+  public function fetch_assoc($statement)
+  {
+    return mysqli_fetch_assoc($statement);
+  }
+  public function num_rows($statement)
+  {
+    return mysqli_num_rows($statement);
+  }
+  public function insert_id()
+  {
+    return mysqli_insert_id($this->con);
+  }
+  public function affected_rows()
+  {
+    return mysqli_affected_rows($this->con);
+  }
+  /*--------------------------------------------------------------*/
+  /* Function for Remove escapes special
+  /* characters in a string for use in an SQL statement
+  /*--------------------------------------------------------------*/
+  public function escape($str){
+    return $this->con->real_escape_string($str);
+  }
+  /*--------------------------------------------------------------*/
+  /* Function for while loop
+  /*--------------------------------------------------------------*/
+  public function while_loop($results,$typeClass){
+      $typeClass = ucfirst($typeClass);
+      $arrays_atributtes = array();
 
-      if (trim($sql != "")) {
-          $this->query_id = $this->con->query($sql);
-      }
-      if (!$this->query_id)
-        // only for Develope mode
-              die("Error en esta consulta :<pre> " . $sql ."</pre>");
-       // For production mode
-        //  die("Error on Query");
+      while ($result = $this->fetch_assoc($results)) {
 
-       return $this->query_id;
+        $attributes = array();
+        foreach ($result as $argument) {
+          array_push($attributes,$argument);
+        }
+        echo json_encode($attributes);
+        echo "-------".count($attributes)."-----<br/><br/>";
+        array_push($arrays_atributtes,$attributes);
+      }    
 
-   }
-
-/*--------------------------------------------------------------*/
-/* Function for Query Helper
-/*--------------------------------------------------------------*/
-public function fetch_array($statement)
-{
-  return mysqli_fetch_array($statement);
-}
-public function fetch_object($statement)
-{
-  return mysqli_fetch_object($statement);
-}
-public function fetch_assoc($statement)
-{
-  return mysqli_fetch_assoc($statement);
-}
-public function num_rows($statement)
-{
-  return mysqli_num_rows($statement);
-}
-public function insert_id()
-{
-  return mysqli_insert_id($this->con);
-}
-public function affected_rows()
-{
-  return mysqli_affected_rows($this->con);
-}
-/*--------------------------------------------------------------*/
- /* Function for Remove escapes special
- /* characters in a string for use in an SQL statement
- /*--------------------------------------------------------------*/
- public function escape($str){
-   return $this->con->real_escape_string($str);
- }
-/*--------------------------------------------------------------*/
-/* Function for while loop
-/*--------------------------------------------------------------*/
-public function while_loop($loop,$typeClass){
- global $db;
-   $results = array();
-   while ($result = $this->fetch_array($loop)) {
-     $aux = new $typeClass();
-      foreach ($result as $property => $argument) {
-        $aux->{$property} = $argument;
-      }
-      array_push($results,$aux);
-   }
- return $results;
-}
+    return null;
+  }
 
 }
 
