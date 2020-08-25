@@ -93,22 +93,19 @@ class MySqli_DB {
   /*--------------------------------------------------------------*/
   /* Function for while loop
   /*--------------------------------------------------------------*/
-  public function while_loop($results,$typeClass){
-      $typeClass = ucfirst($typeClass);
+  public function while_loop($results){
+      
       $arrays_atributtes = array();
 
       while ($result = $this->fetch_assoc($results)) {
-
         $attributes = array();
         foreach ($result as $argument) {
           array_push($attributes,$argument);
         }
-        echo json_encode($attributes);
-        echo "-------".count($attributes)."-----<br/><br/>";
         array_push($arrays_atributtes,$attributes);
       }    
 
-    return null;
+    return $arrays_atributtes;
   }
 
 }

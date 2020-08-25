@@ -1,9 +1,9 @@
 <?php
 
 class Punto{
-    private static $tablename = 'punto';
-    private $id_p;
-    private $name_p;
+    public static $tablename = 'punto';
+    public $id_p;
+    public $name_p;
     public $type_p;
     public $description_p;
     public $addres_p;
@@ -12,13 +12,13 @@ class Punto{
     public $coor_lon_p;
 
     function __construct(){ 
-        $numargs = func_get_args();
+        $listArgs = func_get_args()[0];
         switch (func_num_args()) {
-            case 0:
+            case '0':
                 $this->__construct1();
                 break;
-            case 8:
-                $this->__construct2($numargs[0],$numargs[1],$numargs[2],$numargs[3],$numargs[4],$numargs[5],$numargs[6],$numargs[7]);
+            case '1':
+                $this->__construct2($listArgs[0],$listArgs[1],$listArgs[2],$listArgs[3],$listArgs[4],$listArgs[5],$listArgs[6],$listArgs[7]);
                 break;
         }     
     }
@@ -102,10 +102,6 @@ class Punto{
 
     public function getcoor_lon_p(){
         return $this->coor_lon_p;
-    }
-
-    public static function getAll(){
-        return find_all(self::$tablename);
     }
 }
 ?>

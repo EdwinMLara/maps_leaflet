@@ -9,17 +9,17 @@ function find_all($table) {
    if(tableExists($table))
    {
      $sql = "SELECT * FROM ".$db->escape($table);
-     return find_by_sql($sql,$table);
+     return find_by_sql($sql);
    }
 }
 /*--------------------------------------------------------------*/
 /* Function for Perform queries
 /*--------------------------------------------------------------*/
-function find_by_sql($sql,$typeClass)
+function find_by_sql($sql)
 {
   global $db;
   $results = $db->query($sql);
-  return  $db->while_loop($results,$typeClass);
+  return  $db->while_loop($results);
 }
 /*--------------------------------------------------------------*/
 /*  Function for Find data from table by id
