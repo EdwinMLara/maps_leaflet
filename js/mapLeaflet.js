@@ -262,6 +262,26 @@ function geoJsontoMarker(capa) {
     }).addTo(mymap);
 }
 
+function hacer_peticion_http(url){
+    var xhttp = new XMLHttpRequest();
+  
+    xhttp.onreadystatechange = function() {
+      if (this.readyState === 4 && this.status === 200) {
+        var Data = JSON.parse(xhttp.responseText);
+        console.log(Data);
+        var Tipos = Data.Types;
+        var Capas = Data.Capas;
+        console.log(Tipos);
+        console.log(Capas);
+      }
+    };  
+  
+    xhttp.open("GET",url, true);
+    xhttp.send();  
+}
+
+hacer_peticion_http("http://localhost:8080/maps-example/api.php");
+
 var geojson_senales_generales = geoJsontoMarker(capa_senales_generales);
 var geojson_senales_wc = geoJsontoMarker(capa_wc);
 var geojson_senales_estacionamientos = geoJsontoMarker(capa_estacionamientos);
@@ -348,6 +368,10 @@ L.control.disableAllLayers = function(opts) {
 }
 var Layers_arrays = [];
 L.control.disableAllLayers({ position: 'bottomleft' }).addTo(mymap);
+
+window.document.onload = function ready(){
+    alert('cargado');
+}
 
 
 
