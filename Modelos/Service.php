@@ -18,7 +18,7 @@
             return $all;
         }
 
-        public function getByType(){
+        public function getByForeingKey($key,$secondTable){
             
         }
 

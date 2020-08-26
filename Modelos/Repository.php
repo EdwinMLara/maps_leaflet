@@ -1,6 +1,6 @@
 <?php
 interface Repository{
     public function getAll();
-    public function getByForeingKey();
+    public function getByForeingKey($arrayToFilter,$functionTofilter);
 }
 ?>
