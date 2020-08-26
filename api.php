@@ -6,6 +6,7 @@
     require_once("Modelos/Repository.php");
     require_once("Modelos/Service.php");
     require_once("Modelos/GeoJson.php");
+    require_once("Modelos/Feature.php");
     $servicioPuntos = new Service(Punto::$tablename);
     $servicioTypes = new Service(Type::$tablename);
     
@@ -20,9 +21,14 @@
             if($Punto->type_p == $id_filter){
                 return true;
             }
-        }); 
-
-        $capaGeojson = new GeoJson("FeatureCollection",$Type->name_t,$array_filtered);
+        });
+        
+        $features = array();
+        foreach($array_filtered as $aux_filter){
+            $feature = new Feature("Feature",$aux_filter);
+            array_push($features,$feature);
+        }
+        $capaGeojson = new GeoJson("FeatureCollection",$Type->name_t,$features);
         array_push($arrayCapas,$capaGeojson);       
     }
     $Api->Capas = $arrayCapas;
