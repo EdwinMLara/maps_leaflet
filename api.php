@@ -7,6 +7,7 @@
     require_once("Modelos/Service.php");
     require_once("Modelos/GeoJson.php");
     require_once("Modelos/Feature.php");
+    require_once("Modelos/Geometry.php");
     $servicioPuntos = new Service(Punto::$tablename);
     $servicioTypes = new Service(Type::$tablename);
     
@@ -25,7 +26,9 @@
         
         $features = array();
         foreach($array_filtered as $aux_filter){
-            $feature = new Feature("Feature",$aux_filter);
+            $coordinates = array($aux_filter->coor_lat_p, $aux_filter->coor_lon_p);
+            $geometry = new Geometry("Point",$coordinates);
+            $feature = new Feature("Feature",$aux_filter,$geometry);
             array_push($features,$feature);
         }
         $capaGeojson = new GeoJson("FeatureCollection",$Type->name_t,$features);
