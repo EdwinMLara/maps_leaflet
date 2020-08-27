@@ -204,7 +204,7 @@ var historiaIcon = new LeafIcon({ iconUrl: 'css/images/historia.png', iconSize: 
 function geoJsontoMarker(capa) {
     return L.geoJson(capa, {
         pointToLayer: function (feature, latlng) {
-            switch (feature.properties.description) {
+            switch (feature.properties.description_p) {
                 case "farmacia":
                     return L.marker(latlng, { icon: farmaciaIcon });
                 case "taxi":
@@ -253,8 +253,8 @@ function geoJsontoMarker(capa) {
 
         },
         onEachFeature: function (feature, layer) {
-            if (feature.properties && feature.properties.Name) {
-                layer.bindPopup('<b>' + feature.properties.Name + '</b><br>' + (feature.properties.direccion ? '<br>' + feature.properties.direccion + '</br>' : ''));
+            if (feature.properties && feature.properties.name_p) {
+                layer.bindPopup('<b>' + feature.properties.name_p + '</b><br>' + (feature.properties.addres_p ? '<br>' + feature.properties.addres_p + '</br>' : ''));
             } else {
                 console.log("no se puede bindear")
             }
@@ -262,19 +262,37 @@ function geoJsontoMarker(capa) {
     }).addTo(mymap);
 }
 
+
+
+var baseMaps = {
+    "<span style='color: gray'> Satelite </span>": Satelite,
+    "<span style='color: gray'> Original </span>": orginal
+};
+
+
+
+var obj = {
+    "Municipal": geojson_municipal,
+    "Colonias": geojson_colonias,
+};
+
 function hacer_peticion_http(url){
     var xhttp = new XMLHttpRequest();
   
     xhttp.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
         var Data = JSON.parse(xhttp.responseText);
-        console.log(Data);
-        var Tipos = Data.Types;
         var Capas = Data.Capas;
-        console.log(Tipos);
-        console.log(Capas);
+        n = Capas.length;
+        for(let i = 0; i<n ; i++){
+            obj[Capas[i].name] = geoJsontoMarker(Capas[i]);
+        }
+        var control_layers = L.control.layers(baseMaps, obj, { position: 'topleft' });
+        control_layers.addTo(mymap);
       }
-    };  
+    }; 
+    
+    console.log(obj);
   
     xhttp.open("GET",url, true);
     xhttp.send();  
@@ -282,45 +300,9 @@ function hacer_peticion_http(url){
 
 hacer_peticion_http("http://localhost:8080/maps-example/api.php");
 
-var geojson_senales_generales = geoJsontoMarker(capa_senales_generales);
-var geojson_senales_wc = geoJsontoMarker(capa_wc);
-var geojson_senales_estacionamientos = geoJsontoMarker(capa_estacionamientos);
-var geojson_senales_restaurantes = geoJsontoMarker(capa_restaurantes);
-var geojson_senales_hoteles = geoJsontoMarker(capa_hoteles);
-var geojson_senales_gasolineras = geoJsontoMarker(capa_gasolineras);
-var geojson_senales_transporte = geoJsontoMarker(capa_transporte);
-var geojson_senales_farmacias = geoJsontoMarker(capa_farmacias);
-var geojson_senales_bancos = geoJsontoMarker(capa_bancos);
-var geojson_senales_hospitales = geoJsontoMarker(capa_hospitales);
-var geojson_senales_historia = geoJsontoMarker(capa_historia);
+//console.log(senales);
 
-var baseMaps = {
-    "<span style='color: gray'> Satelite </span>": Satelite,
-    "<span style='color: gray'> Original </span>": orginal
-};
 
-var allLayers2 = [geojson_senales_bancos, geojson_senales_estacionamientos, geojson_senales_farmacias];
-var todo = L.layerGroup(allLayers2);
-
-var senales = {
-    "Municipal": geojson_municipal,
-    "Colonias": geojson_colonias,
-    "Generales": geojson_senales_generales,
-    "Baños": geojson_senales_wc,
-    "Estacionamientos": geojson_senales_estacionamientos,
-    "Restaurantes": geojson_senales_restaurantes,
-    "Hoteles": geojson_senales_hoteles,
-    "Gasolineras": geojson_senales_gasolineras,
-    "Transporte": geojson_senales_transporte,
-    "Farmacias": geojson_senales_farmacias,
-    "Bancos": geojson_senales_bancos,
-    "Hospitales": geojson_senales_hospitales,
-    "Historia": geojson_senales_historia
-};
-
-var control_layers = L.control.layers(baseMaps, senales, { position: 'topleft' });
-
-control_layers.addTo(mymap);
 
 L.Control.DisableAllLayers = L.Control.extend({
     onAdd: function(map) {
