@@ -78,4 +78,27 @@ function tableExists($table){
       }
   }
 
-  ?>
+
+/*--------------------------------------------------------------*/
+/* insert
+/*--------------------------------------------------------------*/
+
+function insertbyTable($table,$obj){
+  global $db;
+  if(tableExists($table)){
+    $sql = "INSERT INTO ".$db->escape($table);
+    $sql_properties = "(";
+    $sql_values = "(";
+    foreach($obj as $property => $value){
+      $sql_properties .= "'".$property."',";
+      $sql_values .= "'".$sql_values."',";
+    }
+    $sql_properties = substr($sql_properties,strlen($sql_properties)-1);
+    $sql_values = substr($sql_values,strlen($sql_values)-1);
+    $sql = $sql.$sql_properties.") VALUES (".$sql_values.")";
+    $db->query($sql);
+    echo $sql;
+    //return ($db->affected_rows() === 1) ? true : false;
+  }
+}
+?>
