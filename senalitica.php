@@ -3,22 +3,22 @@
 $title = "Uriangato | Señalitica";
 
 require_once("config/load.php");
-$types = find_all('tipo');
+$types = find_all('type');
 ?>
 <?php
 if (isset($_POST['add_senalitica'])) {
   if (empty($errors)) {
 
     $name =             $db->escape($_POST['name_p']); //letra
-    $descripcion =      $db->escape($_POST['descripcion_p']); //letra
-    $direccion =        $db->escape($_POST['direccion_p']); //letra
-    $telefono =         $db->escape($_POST['telefono_p']); //letra
-    $tipo =             $db->escape($_POST['tipo_p']); //letra
-    $coor_la =          $_POST['coor_lat']; //letra
-    $coor_lng =         $_POST['coor_lng']; //letra
+    $descripcion =      $db->escape($_POST['description_p']); //letra
+    $direccion =        $db->escape($_POST['addres_p']); //letra
+    $telefono =         $db->escape($_POST['tel_p']); //letra
+    $tipo =             $db->escape($_POST['type_p']); //letra
+    $coor_la =          $_POST['coor_lat_p']; //letra
+    $coor_lng =         $_POST['coor_lon_p']; //letra
 
     $query  = "INSERT INTO punto (";
-    $query .= "name_p,tipo_p,descripcion_p,addres_p,tel_p,coor_al,coor_lo";
+    $query .= "name_p,type_p,description_p,addres_p,tel_p,coor_lat_p,coor_lon_p";
     $query .= ") VALUES (";
     $query .= " '{$name}','{$tipo}','{$descripcion}','{$direccion}','{$telefono}','{$coor_la}','{$coor_lng}')";
     //$query .= " ON DUPLICATE KEY UPDATE id_{$le} = '{$dat}'";
@@ -96,7 +96,7 @@ if (isset($_POST['add_senalitica'])) {
                   <div class="inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                      <input name="descripcion_p" placeholder="Descripcion" class="form-control" type="text">
+                      <input name="description_p" placeholder="Descripcion" class="form-control" type="text">
                     </div>
                   </div>
                 </div>
@@ -106,7 +106,7 @@ if (isset($_POST['add_senalitica'])) {
                   <div class="inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                      <input name="direccion_p" placeholder="Direccion" class="form-control" type="text" required>
+                      <input name="addres_p" placeholder="Direccion" class="form-control" type="text" required>
                     </div>
                   </div>
                 </div>
@@ -117,7 +117,7 @@ if (isset($_POST['add_senalitica'])) {
                   <div class="inputGroupContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                      <input name="telefono_p" placeholder="Telefono" class="form-control" type="text">
+                      <input name="tel_p" placeholder="Telefono" class="form-control" type="text">
                     </div>
                   </div>
                 </div>
@@ -131,10 +131,10 @@ if (isset($_POST['add_senalitica'])) {
                   <div class="selectContainer">
                     <div class="input-group">
                       <span class="input-group-addon"><i class="glyphicon glyphicon-list"></i></span>
-                      <select name="tipo_p" class="form-control selectpicker" required>
+                      <select name="type_p" class="form-control selectpicker" required>
                         <option value=" ">--Selecciona un tipo--</option>
                         <?php foreach ($types as $type) : ?>
-                          <option value="<?php echo $type['id_t']; ?>"><?php echo strtoupper($type['name_t']); ?></option>
+                          <option value="<?php echo $type[0]; ?>"><?php echo strtoupper($type[1]); ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
@@ -148,7 +148,7 @@ if (isset($_POST['add_senalitica'])) {
                       <div class="inputGroupContainer">
                         <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                          <input name="coor_lat" id="lat" required>
+                          <input name="coor_lat_p" id="lng" required>
                         </div>
                       </div>
                     </div>
@@ -158,7 +158,7 @@ if (isset($_POST['add_senalitica'])) {
                       <div class="inputGroupContainer">
                         <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
-                          <input name="coor_lng" id="lng" required>
+                          <input name="coor_lon_p" id="lat" required>
                         </div>
                       </div>
                     </div>
