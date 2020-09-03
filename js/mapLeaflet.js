@@ -254,7 +254,9 @@ function geoJsontoMarker(capa) {
         },
         onEachFeature: function (feature, layer) {
             if (feature.properties && feature.properties.name_p) {
-                layer.bindPopup('<b>' + feature.properties.name_p + '</b><br>' + (feature.properties.addres_p ? '<br>' + feature.properties.addres_p + '</br>' : ''));
+                layer.bindPopup('<b>' + feature.properties.name_p + '</b><br>' + 
+                ((feature.properties.addres_p) ? '<br>' + feature.properties.addres_p + '</br>' : '') +
+                (feature.properties.tel_p ? '<br>' + feature.properties.tel_p + '</br>' : ''));
             } else {
                 console.log("no se puede bindear")
             }
@@ -268,8 +270,6 @@ var baseMaps = {
     "<span style='color: gray'> Satelite </span>": Satelite,
     "<span style='color: gray'> Original </span>": orginal
 };
-
-
 
 var obj = {
     "Municipal": geojson_municipal,
@@ -292,17 +292,11 @@ function hacer_peticion_http(url){
       }
     }; 
     
-    console.log(obj);
-  
     xhttp.open("GET",url, true);
     xhttp.send();  
 }
 
 hacer_peticion_http("http://localhost:8080/maps-example/api.php");
-
-//console.log(senales);
-
-
 
 L.Control.DisableAllLayers = L.Control.extend({
     onAdd: function(map) {
@@ -350,13 +344,3 @@ L.control.disableAllLayers = function(opts) {
 }
 var Layers_arrays = [];
 L.control.disableAllLayers({ position: 'bottomleft' }).addTo(mymap);
-
-window.document.onload = function ready(){
-    alert('cargado');
-}
-
-
-
-
-
-
