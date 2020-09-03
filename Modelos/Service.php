@@ -22,5 +22,15 @@
             
         }
 
+        public function deleteById($id){
+            return delete_by_id($this->typeService,$id);
+        }
+
+        public function insert($arguments){
+            $typeClass = ucfirst($this->typeService);
+            $object = new $typeClass($arguments);
+            return insertbyTable($this->typeService,$object);
+        }
+
     }
 ?>
