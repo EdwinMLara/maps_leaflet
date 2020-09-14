@@ -1,10 +1,14 @@
 <?php
 require_once('Modelos/Type.php');
+require_once("config/database.php");
+require_once("config/sql.php");
 require_once('Modelos/Repository.php');
 require_once('Modelos/Service.php');
 
-$target_dir = "css/images";
-$target_file = $target_dir.basename($_FILES["fileToUpload"]["name"]);
+
+$target_dir = "css/images/";
+/**Target file sirve para guardar con el mismo nombre */
+$target_file = $target_dir."/".basename($_FILES["fileToUpload"]["name"]);
 $uploadOK = 1;
 $imaFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 $status = ""; 
@@ -19,7 +23,7 @@ if(isset($_POST["submit"])){
         $uploadOK = 0;
     }
 }else{
-    $status = "Error al Guardar los datos";
+    $status = "No hay datos para guardar";
 }
 
 if(file_exists($target_file)){
@@ -36,22 +40,23 @@ if($imaFileType != "jpg" && $imaFileType != "png" && $imaFileType != "jpeg"){
     $uploadOK = 0;
 }
 
-if(!$uploadOK){
-    $status = "Lo sentimos el archivo no fue subido";
+if($uploadOK == 0){
     $uploadOK = 0;
 }else{
     if(isset($_POST["name"])){
-        $_FILES["fileToUpload"]["tmp_name"] = $_POST["name"];
-    }
-    if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],$target_file)){
-        $status = "El archivo fue subido exitosamente";
-        $type = new Type([$_POST['nombre'],$_POST['icono']]);
-        $service = new Service("type");
-        $service->insert($type);
-    }else{
-        $status = "Lo sentimos ocurrio un error al subir el archivo";
+        $new_name_image = $target_dir.$_POST["name"].".".$imaFileType;
+        if(move_uploaded_file($_FILES["fileToUpload"]["tmp_name"],$new_name_image)){
+            $status = "El archivo fue subido exitosamente";
+            $service = new Service("type");
+            if(!$service->insert($_POST["name"])){
+                $status = "No se pudo almacenar en la base de datos";
+            }
+        }else{
+            $status = "Lo sentimos ocurrio un error al subir el archivo";
+        }
     }
 }
+
 $url = "/maps-example/newIcon.php?status=".$status."&upload=".$uploadOK;
 
 echo "<script>window.location='".$url."';</script>";
