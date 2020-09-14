@@ -28,7 +28,7 @@
       <!-- /.card-header -->
       <div class="card-body">
         <div id="contenedor">
-          <form class="form-horizontal" action="guardarIcono.php" method="post" id="icon_form" enctype="multipart/form-data" autocomplete="FALSE">
+          <form class="form-horizontal" action="guardarIcono.php" method="post" id="icon_form" enctype="multipart/form-data" autocomplete="off">
 
             <div class="row">
               <div class="col-md-6">
@@ -75,14 +75,11 @@ submit.onchange = (e) =>{
   
   if(formatFile.localeCompare("png") === 0 || formatFile.localeCompare("jpg") === 0 || formatFile.localeCompare("jpeg") === 0){
     console.log("imagen valida");
+    temporal = URL.createObjectURL(file);
+    document.getElementById("icono").setAttribute("src",temporal);
   }else{
     console.log("imagen no valida");
-  }
-
-  /*temporal = URL.createObjectURL(file);
-        console.log(temporal);
-        document.getElementById("icono").setAttribute("src",temporal);
-   */   
+  } 
   
 }
 </script>
