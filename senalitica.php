@@ -6,6 +6,9 @@ require_once("config/load.php");
 $types = find_all('type');
 ?>
 <?php
+if(isset($_GET["status"])){
+  $status = intval($_GET["status"]);
+}
 if (isset($_POST['add_senalitica'])) {
   if (empty($errors)) {
 
@@ -32,6 +35,7 @@ if (isset($_POST['add_senalitica'])) {
   } else {
     $session->msg('w', $errors);
     //redirect('add_com', true);
+    $status = 0;
   }
 }
 ?>
@@ -73,10 +77,17 @@ if (isset($_POST['add_senalitica'])) {
           <h3>Datos de Señalitica</h3>
         </center>
       </div>
+      <?php
+          if($status){
+            echo "<div class='alert alert-success' role='alert'> Registro Exitoso </div>";
+          }else{
+            echo "<div class='alert alert-danger' role='alert'> Algo salio mal </div>";
+          }
+      ?>
       <!-- /.card-header -->
       <div class="card-body">
         <div id="contenedor">
-          <form class="well form-horizontal" action="senalitica.php" method="post" id="contact_form">
+          <form class="well form-horizontal" action="senalitica.php?status=1" method="post" id="contact_form">
 
             <div class="row">
               <div class="col-md-6">

@@ -17,7 +17,7 @@
     $Puntos =  $servicioPuntos->getAll();
     $arrayCapas = array();
     foreach($Types as $Type){
-        $id_filter = $Type->id_t;
+        $id_filter = $Type->name_t[0];
         $array_filtered = array_filter($Puntos,function ($Punto) use ($id_filter){
             if($Punto->type_p == $id_filter){
                 return true;

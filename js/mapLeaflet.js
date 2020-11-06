@@ -282,6 +282,7 @@ function hacer_peticion_http(url){
     xhttp.onreadystatechange = function() {
       if (this.readyState === 4 && this.status === 200) {
         var Data = JSON.parse(xhttp.responseText);
+        console.log(Data);
         var Capas = Data.Capas;
         n = Capas.length;
         for(let i = 0; i<n ; i++){
